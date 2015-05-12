@@ -235,4 +235,13 @@ public abstract class AbstractExcelItemReader<T> extends AbstractItemCountingIte
     public void setSheetMappings(Map<Integer, Class<? extends T>> sheetMappings) {
 		this.sheetMappings = sheetMappings;
 	}
+    
+    /**
+     * The number of columns for a sheet in the underlying workbook.
+     *
+     * @return the number of columns for a sheet.
+     */
+    public int getNumberOfColumnsBySheet(int sheet) {
+		return this.getSheet(sheet).getNumberOfColumns();
+	}
 }

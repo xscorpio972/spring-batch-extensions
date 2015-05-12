@@ -21,27 +21,29 @@ import org.springframework.batch.item.excel.ExcelFileParseException;
  * @author Jyl-Cristoff
  *
  */
-public class PoiMultipleSheetExcelItemReader<T> extends
-		PoiItemReader<T> {
-	
-	public T read(int sheetNumber){
-		if(this.currentSheet != sheetNumber){
+public class PoiMultipleSheetExcelItemReader<T> extends PoiItemReader<T> {
+
+	public T read(int sheetNumber) {
+		if (this.currentSheet != sheetNumber) {
 			currentSheet = sheetNumber;
 			this.openSheet();
 		}
-		 if (this.noInput || this.rs == null) {
-	            return null;
-	        }
+		if (this.noInput || this.rs == null) {
+			return null;
+		}
 
-	        if (rs.next()) {
-	            try {
-	                return this.rowMapper.mapRow(rs);
-	            } catch (final Exception e) {
-	                throw new ExcelFileParseException("Exception parsing Excel file.", e, this.resource.getDescription(),
-	                        rs.getMetaData().getSheetName(), rs.getCurrentRowIndex(), rs.getCurrentRow());
-	            }
-	        } 
-	        return null;
+		if (rs.next()) {
+			try {
+				return this.rowMapper.mapRow(rs);
+			} catch (final Exception e) {
+				throw new ExcelFileParseException(
+						"Exception parsing Excel file.", e,
+						this.resource.getDescription(), rs.getMetaData()
+								.getSheetName(), rs.getCurrentRowIndex(),
+						rs.getCurrentRow());
+			}
+		}
+		return null;
 	}
 
 }

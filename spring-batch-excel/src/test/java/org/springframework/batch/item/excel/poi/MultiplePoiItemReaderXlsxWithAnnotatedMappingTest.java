@@ -30,7 +30,7 @@ import org.springframework.core.io.ClassPathResource;
 
 public class MultiplePoiItemReaderXlsxWithAnnotatedMappingTest<T> extends AbstractExcelItemReaderTests {
 
-	private Map<Integer, Class<? extends Object>> sheetMappings = new HashMap<Integer, Class<? extends Object>>();
+	private Map<Integer, Class<?>> sheetMappings = new HashMap<Integer, Class<?>>();
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
