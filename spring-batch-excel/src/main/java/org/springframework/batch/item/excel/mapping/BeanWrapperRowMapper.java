@@ -1,20 +1,29 @@
 package org.springframework.batch.item.excel.mapping;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import org.springframework.batch.item.excel.RowMapper;
 import org.springframework.batch.item.excel.support.rowset.RowSet;
 import org.springframework.batch.support.DefaultPropertyEditorRegistrar;
-import org.springframework.beans.*;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.NotWritablePropertyException;
+import org.springframework.beans.PropertyAccessor;
+import org.springframework.beans.PropertyAccessorUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.DataBinder;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * {@link RowMapper} implementation based on bean property paths. The
@@ -156,11 +165,14 @@ public class BeanWrapperRowMapper<T> extends DefaultPropertyEditorRegistrar impl
      */
     @Override
     public T mapRow(RowSet rs) throws BindException {
-        T copy = getBean();
-        DataBinder binder = createBinder(copy);
-        binder.bind(new MutablePropertyValues(getBeanProperties(copy, rs.getProperties())));
-        if (binder.getBindingResult().hasErrors()) {
-            throw new BindException(binder.getBindingResult());
+        T copy = null;
+        if(!isRowEmpty(rs)){
+           copy = getBean();
+    	   DataBinder binder = createBinder(copy);
+           binder.bind(new MutablePropertyValues(getBeanProperties(copy, rs.getProperties())));
+           if (binder.getBindingResult().hasErrors()) {
+               throw new BindException(binder.getBindingResult());
+           }  
         }
         return copy;
     }
@@ -393,4 +405,24 @@ public class BeanWrapperRowMapper<T> extends DefaultPropertyEditorRegistrar impl
             return true;
         }
     }
+    
+    /**
+	 * Check if row is empty.
+	 * 
+	 * @param row
+	 * @return
+	 */
+	private static boolean isRowEmpty(RowSet rs) {
+		boolean ret = true;
+		String[] currentRow = rs.getCurrentRow();
+		for (int cellNum = 0; cellNum < currentRow.length; cellNum++) {
+			String cell = currentRow[cellNum];
+			if (!StringUtils.isEmpty(cell)) {
+				ret = false;
+				break;
+			}
+		}
+
+		return ret;
+	}
 }
