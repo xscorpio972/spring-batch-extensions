@@ -62,5 +62,10 @@ public class PoiMultipleSheetExcelItemReader<T> extends AbstractExcelItemReader<
 	public void setDelegate(PoiItemReader<T> delegate) {
 		this.delegate = delegate;
 	}
+	
+	public void repositionningSheet(int sheet){
+		this.currentSheet = sheet;
+		this.openSheet();
+	}
 
 }
