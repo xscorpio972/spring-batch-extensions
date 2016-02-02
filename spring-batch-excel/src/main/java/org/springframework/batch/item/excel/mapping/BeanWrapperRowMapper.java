@@ -426,3 +426,4 @@ public class BeanWrapperRowMapper<T> extends DefaultPropertyEditorRegistrar impl
 		return ret;
 	}
 }
+

@@ -35,7 +35,7 @@ public class BeanWrapperRowMapperTest {
         mapper.afterPropertiesSet();
 
         List<String[]> rows = new ArrayList<String[]>();
-        rows.add(new String[]{"id", "lastName", "firstName", "position", "birthYear", "debutYear"});
+        rows.add(new String[]{"identificator", "lastName", "firstName", "position", "birthYear", "debutYear"});
         rows.add( new String[]{"AbduKa00", "Abdul-Jabbar", "Karim", "rb", "1974", "1996"});
         MockSheet sheet = new MockSheet("players", rows);
 
